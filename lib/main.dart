@@ -1,6 +1,7 @@
 import 'package:art_elevate/pages/splash_screen.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -8,13 +9,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  String savedLanguage = await _loadLanguagePreference();
+ await Firebase.initializeApp(
+  options: kIsWeb
+      ? const FirebaseOptions(
+          apiKey: "AIzaSyDDJLqzsAidQiae0bysssnyyE3xdM_yzSI",
+          appId: "1:1036178823711:web:b091190672ee4004ba532a",
+          messagingSenderId: "1036178823711",
+          projectId: "art-elevate",
+          storageBucket: "art-elevate.firebasestorage.app",
+        )
+      : null,
+);
+
+if (!kIsWeb) {
   await FirebaseAppCheck.instance.activate();
-  runApp(MyApp(initialLanguage: savedLanguage));
 }
 
-Future<String> _loadLanguagePreference() async { 
+  String savedLanguage = await _loadLanguagePreference();
+  runApp(
+    MyApp(initialLanguage: savedLanguage),
+  );
+}
+
+Future<String> _loadLanguagePreference() async {
   final prefs = await SharedPreferences.getInstance();
   String? language = prefs.getString('language');
   return language ?? 'en';
@@ -71,10 +88,6 @@ class _MyAppState extends State<MyApp> {
         Locale('ml', ''),
         Locale('hi', '')
       ],
-      // home:LoginScreen(),
-      // home: Username(phone: ''),
-      // home:BecomeSellerPage(name: 'vp', email: 'a@gmail.com', phone: '11111111'),
-      // home: HomePage(name: 'vp',email: 'vp@gmail.com',phone: '12',img: '',itemUrl: '',itemPrice: '',itemName: '')
     );
   }
 }
