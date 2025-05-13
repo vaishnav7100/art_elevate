@@ -20,7 +20,7 @@ import 'package:art_elevate/pages/pages/drawer/policies/terms_and_policies.dart'
 import 'package:art_elevate/pages/pages/drawer/wishlist.dart';
 import 'package:art_elevate/pages/mainpage/viewallpage.dart';
 import 'package:art_elevate/services/database.dart';
-import 'package:art_elevate/single/single_view.dart';
+import 'package:art_elevate/view/single_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

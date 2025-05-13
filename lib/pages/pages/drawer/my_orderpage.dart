@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:art_elevate/chats/messagepage.dart';
 import 'package:art_elevate/constant.dart';
 import 'package:art_elevate/pages/mainpage/bottom_nav.dart';
-import 'package:art_elevate/single/single_view.dart';
+import 'package:art_elevate/view/single_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

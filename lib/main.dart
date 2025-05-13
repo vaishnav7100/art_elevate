@@ -14,7 +14,7 @@ void main() async {
   runApp(MyApp(initialLanguage: savedLanguage));
 }
 
-Future<String> _loadLanguagePreference() async {
+Future<String> _loadLanguagePreference() async { 
   final prefs = await SharedPreferences.getInstance();
   String? language = prefs.getString('language');
   return language ?? 'en';

@@ -1,6 +1,6 @@
 import 'package:art_elevate/constant.dart';
 import 'package:art_elevate/services/database.dart';
-import 'package:art_elevate/single/single_view.dart';
+import 'package:art_elevate/view/single_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

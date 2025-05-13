@@ -70,6 +70,7 @@ dependencies:
   firebase_app_check:
   animations: 
   swipeable_button_view: 
+  lottie: ^3.3.1
   
 
   
