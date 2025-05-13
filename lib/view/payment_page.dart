@@ -1,4 +1,4 @@
-import 'package:art_elevate/pages/mainpage/bottom_nav.dart';
+import 'package:art_elevate/views/mainpage/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:art_elevate/chats/chat_services.dart';
 import 'package:art_elevate/chats/chatbubble.dart';
-import 'package:art_elevate/constant.dart';
+import 'package:art_elevate/views/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';

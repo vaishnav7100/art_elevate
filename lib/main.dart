@@ -1,4 +1,4 @@
-import 'package:art_elevate/pages/splash_screen.dart';
+import 'package:art_elevate/views/splash_screen.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';

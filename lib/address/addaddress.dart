@@ -1,5 +1,5 @@
 import 'package:art_elevate/address/savedaddress.dart';
-import 'package:art_elevate/constant.dart';
+import 'package:art_elevate/views/constant.dart';
 import 'package:art_elevate/view/order_summary.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
