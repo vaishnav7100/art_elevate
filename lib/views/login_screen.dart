@@ -8,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,31 +22,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // final formKey = GlobalKey<FormState>();
   var name = '';
   var phone = '';
   var email = '';
-
-  // void _login() {
-  //   if (formKey.currentState?.validate() ?? false) {
-  //     String email = _emailController.text;
-
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => HomePage(
-  //           img: '',
-  //           name: name,
-  //           phone: phone,
-  //           email: email,
-  //           itemUrl: '',
-  //           itemPrice: '',
-  //           itemName: '',
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -195,20 +174,9 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              "assets/login_bg.png",
+            child: Lottie.asset(
+              "assets/background.json",
               fit: BoxFit.cover,
-              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                if (wasSynchronouslyLoaded) {
-                  return child;
-                } else {
-                  return AnimatedOpacity(
-                    opacity: frame != null ? 1 : 0,
-                    duration: const Duration(milliseconds: 500),
-                    child: child,
-                  );
-                }
-              },
             ),
           ),
           Scaffold(
