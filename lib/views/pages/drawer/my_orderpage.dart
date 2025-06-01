@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:art_elevate/l10n/app_localizations.dart';
 
 class MyOrders extends StatefulWidget {
   const MyOrders({super.key});

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:art_elevate/l10n/app_localizations.dart';
 
 class Savedaddress extends StatefulWidget {
   const Savedaddress({

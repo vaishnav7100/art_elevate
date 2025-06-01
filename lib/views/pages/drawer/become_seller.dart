@@ -15,7 +15,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:art_elevate/l10n/app_localizations.dart';
 import 'dart:io';
 import 'dart:async';
 

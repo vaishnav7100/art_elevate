@@ -12,7 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:art_elevate/l10n/app_localizations.dart';
 
 class MessagePage extends StatefulWidget {
   final String receiverEmail;
@@ -241,8 +241,9 @@ class _MessagePageState extends State<MessagePage> {
                     if (_formKey.currentState!.validate()) {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
-                         SnackBar(
-                          content: Text(AppLocalizations.of(context)!.report_sent_successfully),
+                        SnackBar(
+                          content: Text(AppLocalizations.of(context)!
+                              .report_sent_successfully),
                           backgroundColor: Colors.green,
                         ),
                       );

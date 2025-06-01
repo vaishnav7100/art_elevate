@@ -1,10 +1,10 @@
+import 'package:art_elevate/l10n/app_localizations.dart';
 import 'package:art_elevate/views/constant.dart';
 import 'package:art_elevate/views/login_screen.dart';
 import 'package:art_elevate/views/mainpage/bottom_nav.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Username extends StatefulWidget {
@@ -39,11 +39,12 @@ class _UsernameState extends State<Username> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title:  Text(AppLocalizations.of(context)!.error),
+            title: Text(AppLocalizations.of(context)!.error),
             content: Text(errorMessage),
             actions: <Widget>[
               TextButton(
-                  onPressed: Navigator.of(context).pop, child:  Text(AppLocalizations.of(context)!.ok))
+                  onPressed: Navigator.of(context).pop,
+                  child: Text(AppLocalizations.of(context)!.ok))
             ],
           );
         },
@@ -119,7 +120,7 @@ class _UsernameState extends State<Username> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title:  Text(AppLocalizations.of(context)!.set_your_profile_password),
+        title: Text(AppLocalizations.of(context)!.set_your_profile_password),
         centerTitle: true,
         titleTextStyle: GoogleFonts.poppins(
             color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),

@@ -1,3 +1,4 @@
+import 'package:art_elevate/l10n/app_localizations.dart';
 import 'package:art_elevate/main.dart';
 import 'package:art_elevate/views/mainpage/bottom_nav.dart';
 import 'package:art_elevate/views/mainpage/username.dart';
@@ -7,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,13 +52,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<String> _loadLanguagePreference() async {
     final prefs = await SharedPreferences.getInstance();
     String? savedLanguage = prefs.getString('language');
-    if (savedLanguage != null) {
-      setState(() {
-        _selectedLanguage = savedLanguage;
-      });
-      MyApp.setLocale(context, Locale(savedLanguage));
-    }
-    return 'en';
+    setState(() {
+      _selectedLanguage = savedLanguage!;
+    });
+    MyApp.setLocale(context, Locale(savedLanguage!));
+      return 'en';
   }
 
   Future<void> _saveLanguagePreference(String languageCode) async {
@@ -448,38 +446,37 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-              ],
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: BottomAppBar(
-              color: Colors.transparent,
-              height: 50,
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: AppLocalizations.of(context)!.noAccount,
-                  style: GoogleFonts.ubuntuMono(
-                    color: Colors.black,
-                    fontSize: 16,
+                SafeArea(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: AppLocalizations.of(context)!.noAccount,
+                        style: GoogleFonts.ubuntuMono(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: AppLocalizations.of(context)!.clickHere,
+                            style: GoogleFonts.poppins(color: Colors.blue[900]),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Username(),
+                                  ),
+                                );
+                              },
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                  children: [
-                    TextSpan(
-                      text: AppLocalizations.of(context)!.clickHere,
-                      style: GoogleFonts.poppins(color: Colors.blue[900]),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Username(),
-                            ),
-                          );
-                        },
-                    )
-                  ],
-                ),
-              ),
+                )
+              ],
             ),
           ),
           if (_isLoading)

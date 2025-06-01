@@ -6,8 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:art_elevate/l10n/app_localizations.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -83,7 +82,7 @@ class _NotificationsState extends State<Notifications> {
         centerTitle: true,
         titleTextStyle: GoogleFonts.poppins(
             color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
-        title:  Text(AppLocalizations.of(context)!.notifications),
+        title: Text(AppLocalizations.of(context)!.notifications),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: notificationsStream,
@@ -100,7 +99,9 @@ class _NotificationsState extends State<Notifications> {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('${AppLocalizations.of(context)!.error}${snapshot.error}'));
+            return Center(
+                child: Text(
+                    '${AppLocalizations.of(context)!.error}${snapshot.error}'));
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -190,7 +191,7 @@ class _NotificationsState extends State<Notifications> {
                             }
                           }
                         },
-                        child:  Text(AppLocalizations.of(context)!.mark_as_read),
+                        child: Text(AppLocalizations.of(context)!.mark_as_read),
                       )),
                 ],
               );

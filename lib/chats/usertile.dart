@@ -3,8 +3,7 @@ import 'dart:developer';
 import 'package:art_elevate/chats/chat_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:art_elevate/l10n/app_localizations.dart';
 
 class UserTile extends StatelessWidget {
   final String text;
@@ -63,7 +62,7 @@ class UserTile extends StatelessWidget {
               itemBuilder: (context) => <PopupMenuEntry>[
                 PopupMenuItem(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child:  Text(AppLocalizations.of(context)!.delete),
+                  child: Text(AppLocalizations.of(context)!.delete),
                   onTap: () {
                     showDialog(
                       barrierDismissible: true,

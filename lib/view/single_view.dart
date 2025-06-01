@@ -12,8 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:art_elevate/l10n/app_localizations.dart';
 
 class SingleView extends StatefulWidget {
   final String imageUrl;
@@ -258,8 +257,9 @@ class _SingleViewState extends State<SingleView> {
                     if (_formKey.currentState!.validate()) {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
-                         SnackBar(
-                          content: Text(AppLocalizations.of(context)!.report_sent_successfully),
+                        SnackBar(
+                          content: Text(AppLocalizations.of(context)!
+                              .report_sent_successfully),
                           backgroundColor: Colors.green,
                         ),
                       );

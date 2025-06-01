@@ -1,4 +1,5 @@
 import 'package:art_elevate/chats/messagepage.dart';
+import 'package:art_elevate/l10n/app_localizations.dart';
 import 'package:art_elevate/views/constant.dart';
 import 'package:art_elevate/main.dart';
 import 'package:art_elevate/models/message.dart';
@@ -16,7 +17,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class mySettings extends StatefulWidget {
@@ -74,12 +74,10 @@ class _mySettingsState extends State<mySettings> {
   Future<String> _loadLanguagePreference() async {
     final prefs = await SharedPreferences.getInstance();
     String? savedLanguage = prefs.getString('language');
-    if (savedLanguage != null) {
-      setState(() {
-        _selectedLanguage = savedLanguage;
-      });
-      MyApp.setLocale(context, Locale(savedLanguage));
-    }
+    setState(() {
+      _selectedLanguage = savedLanguage!;
+    });
+    MyApp.setLocale(context, Locale(savedLanguage!));
     return 'en';
   }
 

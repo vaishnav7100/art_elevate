@@ -13,8 +13,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:art_elevate/l10n/app_localizations.dart';
 
 class OrderSummary extends StatefulWidget {
   final String userId;
@@ -336,12 +335,14 @@ class _OrderSummaryState extends State<OrderSummary> {
           child: TextButton(
             onPressed: () {
               if (addressSaved) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(content: Text(AppLocalizations.of(context)!.processing_your_order)));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        AppLocalizations.of(context)!.processing_your_order)));
                 openCheckout();
               } else {
-                ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-                    content: Text(AppLocalizations.of(context)!.please_save_your_address)));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(AppLocalizations.of(context)!
+                        .please_save_your_address)));
               }
             },
             style: TextButton.styleFrom(
@@ -402,7 +403,8 @@ class _OrderSummaryState extends State<OrderSummary> {
                       }
                       if (snapshot.hasError) {
                         return Center(
-                          child: Text('${AppLocalizations.of(context)!.error} ${snapshot.error}'),
+                          child: Text(
+                              '${AppLocalizations.of(context)!.error} ${snapshot.error}'),
                         );
                       }
                       if (snapshot.data == null ||

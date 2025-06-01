@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:art_elevate/l10n/app_localizations.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});

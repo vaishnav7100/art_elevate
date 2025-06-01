@@ -2,8 +2,7 @@ import 'package:art_elevate/views/mainpage/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:art_elevate/l10n/app_localizations.dart';
 
 class PaymentPage extends StatefulWidget {
   final String imageUrl;
@@ -74,7 +73,7 @@ class _PaymentPageState extends State<PaymentPage> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         backgroundColor: Colors.white,
-        title:  Text(AppLocalizations.of(context)!.payment),
+        title: Text(AppLocalizations.of(context)!.payment),
         centerTitle: true,
         titleTextStyle: GoogleFonts.poppins(
           color: Colors.black,

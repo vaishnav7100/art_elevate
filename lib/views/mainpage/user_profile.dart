@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:art_elevate/l10n/app_localizations.dart';
 
 class UserProfile extends StatefulWidget {
   final String username;
@@ -171,7 +170,8 @@ class _UserProfileState extends State<UserProfile> {
                         }
                         if (snapshot.hasError) {
                           return Center(
-                              child: Text('${AppLocalizations.of(context)!.error}${snapshot.error}'));
+                              child: Text(
+                                  '${AppLocalizations.of(context)!.error}${snapshot.error}'));
                         }
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
                           return const SizedBox();

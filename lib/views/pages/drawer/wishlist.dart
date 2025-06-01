@@ -1,3 +1,4 @@
+import 'package:art_elevate/l10n/app_localizations.dart';
 import 'package:art_elevate/views/constant.dart';
 import 'package:art_elevate/views/mainpage/bottom_nav.dart';
 import 'package:art_elevate/view/single_view.dart';
@@ -8,7 +9,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Wishlist extends StatefulWidget {
   const Wishlist({super.key});
