@@ -52,11 +52,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<String> _loadLanguagePreference() async {
     final prefs = await SharedPreferences.getInstance();
     String? savedLanguage = prefs.getString('language');
+
+    savedLanguage ??= 'en';
+
     setState(() {
       _selectedLanguage = savedLanguage!;
     });
-    MyApp.setLocale(context, Locale(savedLanguage!));
-      return 'en';
+
+    MyApp.setLocale(context, Locale(savedLanguage));
+    return savedLanguage;
   }
 
   Future<void> _saveLanguagePreference(String languageCode) async {
