@@ -1,6 +1,6 @@
 import 'package:art_elevate/address/addaddress.dart';
-import 'package:art_elevate/views/constant.dart';
-import 'package:art_elevate/views/pages/drawer/myaccount/myaccount.dart';
+import 'package:art_elevate/views/utils/constant.dart';
+import 'package:art_elevate/views/pages/settings/myaccount/myaccount.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

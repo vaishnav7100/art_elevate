@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:art_elevate/chats/chat_services.dart';
 import 'package:art_elevate/chats/messagepage.dart';
 import 'package:art_elevate/chats/usertile.dart';
-import 'package:art_elevate/views/constant.dart';
+import 'package:art_elevate/views/utils/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
