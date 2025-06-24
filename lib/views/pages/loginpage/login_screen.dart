@@ -1,5 +1,6 @@
 import 'package:art_elevate/l10n/app_localizations.dart';
 import 'package:art_elevate/main.dart';
+import 'package:art_elevate/models/auth_viewmodel.dart';
 import 'package:art_elevate/views/pages/mainpage/bottom_nav.dart';
 import 'package:art_elevate/views/pages/loginpage/set_profile.dart';
 import 'package:art_elevate/views/pages/loginpage/forgot_password.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,24 +24,20 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  var name = '';
-  var phone = '';
-  var email = '';
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String _email, _password;
 
-  chechAuthentication() {
-    _auth.authStateChanges().listen((user) {
-      if (user != null && user.emailVerified && mounted) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const BottomNavBar()),
-            (Route<dynamic> route) => false);
-      }
-    });
-  }
+  // chechAuthentication() {
+  //   _auth.authStateChanges().listen((user) {
+  //     if (user != null && user.emailVerified && mounted) {
+  //       Navigator.pushAndRemoveUntil(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => const BottomNavBar()),
+  //           (Route<dynamic> route) => false);
+  //     }
+  //   });
+  // }
 
   // navigateToSignup() {
   //   Navigator.pushReplacement(
@@ -72,105 +70,13 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _loadLanguagePreference();
-    chechAuthentication();
   }
 
-  bool _isLoading = false;
   bool _isObscure = true;
-
-  void signin() async {
-    if (_formKey.currentState != null) {
-      _formKey.currentState!.validate();
-      _formKey.currentState!.save();
-
-      setState(() {
-        _isLoading = true;
-      });
-
-      try {
-        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-            email: _email, password: _password);
-
-        User? user = userCredential.user;
-        if (user != null) {
-          if (user.emailVerified) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const BottomNavBar()),
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text(
-                    "A verification email has been sent. Please verify your email before logging in.")));
-            await user.sendEmailVerification();
-          }
-        }
-      } on FirebaseAuthException catch (e) {
-        if (mounted) {
-          handleFirebaseAuthError(e);
-        }
-      } catch (e) {
-        if (mounted) {
-          showError(AppLocalizations.of(context)!.unknownError);
-        }
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      }
-    }
-  }
-
-  showError(String errorMessage) {
-    if (mounted) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            title: Text(AppLocalizations.of(context)!.error),
-            content: Text(errorMessage),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(),
-                  child: Text(AppLocalizations.of(context)!.okButton))
-            ],
-          );
-        },
-      );
-    }
-  }
-
-  void handleFirebaseAuthError(FirebaseAuthException e) {
-    String errorMessage = 'An unknown error occurred. Please try again later.';
-
-    switch (e.code) {
-      case 'user-not-found':
-        errorMessage = AppLocalizations.of(context)!.userNotFound;
-        break;
-      case 'wrong-password':
-        errorMessage = AppLocalizations.of(context)!.wrongPassword;
-        break;
-      case 'invalid-email':
-        errorMessage = AppLocalizations.of(context)!.invalidEmail;
-        break;
-      case 'email-already-in-use':
-        errorMessage = AppLocalizations.of(context)!.emailInUse;
-        break;
-      default:
-        errorMessage = e.message ?? errorMessage;
-        break;
-    }
-
-    // Show the error using an AlertDialog or any other UI component
-    showError(errorMessage);
-  }
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthViewModel>(context);
     return ColoredBox(
       color: Colors.white,
       child: Stack(
@@ -414,8 +320,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(
                             height: 8,
                           ),
+                          if (auth.errorMessage != null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: Text(
+                                auth.errorMessage!,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ),
                           ElevatedButton(
-                            onPressed: _isLoading ? null : signin,
+                            onPressed: auth.isLoading
+                                ? null
+                                : () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      try {
+                                        await auth.login(
+                                          _emailController.text.trim(),
+                                          _passwordController.text.trim(),
+                                          context,
+                                        );
+                                      } catch (e) {}
+                                    }
+                                  },
                             style: ElevatedButton.styleFrom(
                               overlayColor: Colors.black,
                               padding: const EdgeInsets.symmetric(
@@ -483,7 +409,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-          if (_isLoading)
+          if (auth.isLoading)
             const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(

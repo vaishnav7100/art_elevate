@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:art_elevate/chats/messagepage.dart';
+import 'package:art_elevate/models/auth_viewmodel.dart';
+import 'package:art_elevate/views/pages/loginpage/login_screen.dart';
 import 'package:art_elevate/views/utils/constant.dart';
 import 'package:art_elevate/views/pages/mainpage/user_profile.dart';
 import 'package:art_elevate/views/pages/loginpage/set_profile.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:art_elevate/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class SingleView extends StatefulWidget {
   final String imageUrl;
@@ -85,7 +88,7 @@ class _SingleViewState extends State<SingleView> {
   Future<void> chechWishlisted() async {
     final wishlistRef = FirebaseFirestore.instance
         .collection('users')
-        .doc(user!.uid)
+        .doc(user?.uid)
         .collection('wishlistedItems');
     final querySnapshot =
         await wishlistRef.where('productId', isEqualTo: widget.productId).get();
@@ -294,6 +297,7 @@ class _SingleViewState extends State<SingleView> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -340,19 +344,14 @@ class _SingleViewState extends State<SingleView> {
                   height: 400,
                   child: Hero(
                     tag: '${widget.productId}Tag',
-                    // child: Image.network(
-                    //   widget.imageUrl,
-                    //   fit: BoxFit.contain,
-                    // ),
                     child: CachedNetworkImage(
                       imageUrl: widget.imageUrl,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => const Center(
                           child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.black), // Progress color
-                              backgroundColor: Colors
-                                  .white, // Background color of the circle
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.black),
+                              backgroundColor: Colors.white,
                               strokeWidth: 5.0)),
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.error),
@@ -480,24 +479,31 @@ class _SingleViewState extends State<SingleView> {
       bottomNavigationBar: GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.only(bottom: 6),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(
-                height: 50,
-                width: 190,
+              const SizedBox(
+                width: 4,
+              ),
+              Expanded(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MessagePage(
-                          receiverEmail: userName,
-                          receiverID: userID,
-                        ),
-                      ),
-                    );
+                    auth.isLoggedIn
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MessagePage(
+                                receiverEmail: userName,
+                                receiverID: userID,
+                              ),
+                            ),
+                          )
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                          );
                   },
                   style: TextButton.styleFrom(
                     overlayColor: Colors.black,
@@ -506,30 +512,29 @@ class _SingleViewState extends State<SingleView> {
                       side: BorderSide(color: Colors.black),
                     ),
                   ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Chat',
-                          style: GoogleFonts.poppins(
-                              fontSize: 20, color: Colors.black),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Icon(
-                          Icons.message_outlined,
-                          color: Colors.black,
-                        )
-                      ],
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Chat',
+                        style: GoogleFonts.poppins(
+                            fontSize: 20, color: Colors.black),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Icon(
+                        Icons.message_outlined,
+                        color: Colors.black,
+                      )
+                    ],
                   ),
                 ),
               ),
-              SizedBox(
-                height: 50,
-                width: 190,
+              const SizedBox(
+                width: 5,
+              ),
+              Expanded(
                 child: TextButton(
                   style: TextButton.styleFrom(
                     overlayColor: Colors.black,
@@ -539,40 +544,47 @@ class _SingleViewState extends State<SingleView> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OrderSummary(
-                          userId: userID,
-                          itemPrice: widget.itemPrice,
-                          itemName: widget.itemName,
-                          itemUrl: widget.imageUrl,
-                          itemRating: widget.itemRating,
-                          productId: widget.productId,
-                        ),
-                      ),
-                    );
+                    auth.isLoggedIn
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OrderSummary(
+                                userId: userID,
+                                itemPrice: widget.itemPrice,
+                                itemName: widget.itemName,
+                                itemUrl: widget.imageUrl,
+                                itemRating: widget.itemRating,
+                                productId: widget.productId,
+                              ),
+                            ),
+                          )
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                          );
                   },
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Buy now',
-                          style: GoogleFonts.poppins(
-                              fontSize: 20, color: Colors.black),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Icon(
-                          Icons.shopping_cart_outlined,
-                          color: Colors.black,
-                        )
-                      ],
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Buy now',
+                        style: GoogleFonts.poppins(
+                            fontSize: 20, color: Colors.black),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Icon(
+                        Icons.shopping_cart_outlined,
+                        color: Colors.black,
+                      )
+                    ],
                   ),
                 ),
+              ),
+              const SizedBox(
+                width: 4,
               ),
             ],
           ),

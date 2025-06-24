@@ -635,24 +635,29 @@ class _OrderSummaryState extends State<OrderSummary> {
                 const SizedBox(
                   width: 20,
                 ),
-                Column(
-                  children: [
-                    SizedBox(
-                      child: Text(
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
                         widget.itemName,
                         style: GoogleFonts.poppins(fontSize: 18),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
                       ),
-                    ),
-                    SizedBox(
-                      child: Text(
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
                         "₹${widget.itemPrice}",
                         style: GoogleFonts.poppins(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )
               ],
             ),

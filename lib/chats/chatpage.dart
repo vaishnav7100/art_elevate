@@ -3,11 +3,15 @@ import 'dart:developer';
 import 'package:art_elevate/chats/chat_services.dart';
 import 'package:art_elevate/chats/messagepage.dart';
 import 'package:art_elevate/chats/usertile.dart';
+import 'package:art_elevate/models/auth_viewmodel.dart';
+import 'package:art_elevate/views/pages/mainpage/bottom_nav.dart';
 import 'package:art_elevate/views/utils/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:art_elevate/l10n/app_localizations.dart';
 
@@ -42,29 +46,83 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthViewModel>(context);
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          scrolledUnderElevation: 0,
-          backgroundColor: kprimaryColor,
-          centerTitle: true,
-          title: Text(
-            AppLocalizations.of(context)!.chats,
-          ),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.chat_outlined,
-                color: Colors.black,
-              ),
-            )
-          ],
-          titleTextStyle: GoogleFonts.poppins(
-              color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        backgroundColor: kprimaryColor,
+        centerTitle: true,
+        title: Text(
+          AppLocalizations.of(context)!.chats,
         ),
-        body: RefreshIndicator(
-            onRefresh: _refreshUserList, child: _buildUserList()));
+        actions: const [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(
+              Icons.chat_outlined,
+              color: Colors.black,
+            ),
+          )
+        ],
+        titleTextStyle: GoogleFonts.poppins(
+            color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
+      ),
+      body: auth.isLoggedIn
+          ? RefreshIndicator(
+              onRefresh: _refreshUserList, child: _buildUserList())
+          : Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Log in to see your chats',
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    )
+                        .animate(delay: const Duration(milliseconds: 200))
+                        .fade(begin: 0, end: 1),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BottomNavBar(
+                            currentIndex: 4,
+                          ),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 50),
+                        elevation: 5,
+                        overlayColor: Colors.black,
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Log In',
+                        style: GoogleFonts.dmSans(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black),
+                      ),
+                    )
+                        .animate(delay: const Duration(milliseconds: 200))
+                        .fade(begin: 0, end: 1),
+                  ],
+                ),
+              ),
+            ),
+    );
   }
 
   Widget _buildUserList() {

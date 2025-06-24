@@ -87,47 +87,34 @@ class _HomePageState extends State<HomePage> {
 
   final TextEditingController _searchController = TextEditingController();
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? user;
-  bool isSignedIn = false;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  // User? user;
+  // bool isSignedIn = false;
   late Future<List<Map<String, dynamic>>> _itemsFuture;
 
   int selectedIndex = 0;
 
-  checkAuthentication() async {
-    _auth.authStateChanges().listen((user) {
-      if (user == null) {
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-          );
-        }
-      }
-    });
-  }
+  // getUser() async {
+  //   try {
+  //     User? firebaseUser = _auth.currentUser;
+  //     await firebaseUser?.reload();
+  //     firebaseUser = _auth.currentUser;
 
-  getUser() async {
-    try {
-      User? firebaseUser = _auth.currentUser;
-      await firebaseUser?.reload();
-      firebaseUser = _auth.currentUser;
-
-      if (firebaseUser != null) {
-        setState(() {
-          user = firebaseUser!;
-          isSignedIn = true;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          isSignedIn = false;
-        });
-        showError(AppLocalizations.of(context)!.error_message);
-      }
-    }
-  }
+  //     if (firebaseUser != null) {
+  //       setState(() {
+  //         user = firebaseUser!;
+  //         isSignedIn = true;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     if (mounted) {
+  //       setState(() {
+  //         isSignedIn = false;
+  //       });
+  //       showError(AppLocalizations.of(context)!.error_message);
+  //     }
+  //   }
+  // }
 
   int unreadCount = 0;
 
@@ -152,8 +139,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    checkAuthentication();
-    getUser();
+    // getUser();
     _itemsFuture = DatabaseMethods().getMultipleCollectionsData();
     _fetchUnreadNotifications();
   }
@@ -695,7 +681,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Text(
                                       text[index],
-                                      style: GoogleFonts.poppins(),
+                                      style: GoogleFonts.poppins(fontSize: 14),
                                       overflow: TextOverflow.ellipsis,
                                     )
                                   ],

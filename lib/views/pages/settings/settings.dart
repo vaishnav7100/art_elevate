@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:art_elevate/chats/messagepage.dart';
 import 'package:art_elevate/l10n/app_localizations.dart';
+import 'package:art_elevate/models/auth_viewmodel.dart';
+import 'package:art_elevate/views/pages/mainpage/bottom_nav.dart';
 import 'package:art_elevate/views/utils/constant.dart';
 import 'package:art_elevate/main.dart';
 import 'package:art_elevate/models/message.dart';
@@ -17,6 +21,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MySettings extends StatefulWidget {
@@ -93,12 +98,30 @@ class _MySettingsState extends State<MySettings> {
   @override
   void initState() {
     super.initState();
+    startAnimation();
     _loadLanguagePreference();
     checkSeller();
   }
 
+  List<Color> gradientColors = [Colors.grey.shade500, Colors.grey.shade500];
+  bool isReversed = false;
+
+  void startAnimation() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          isReversed = !isReversed;
+          gradientColors = isReversed
+              ? [Colors.white, Colors.black] // Reverse colors
+              : [Colors.black, Colors.white];
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthViewModel>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -109,6 +132,7 @@ class _MySettingsState extends State<MySettings> {
             child: Material(
               color: Colors.transparent,
               child: DropdownButton<String>(
+                alignment: Alignment.topRight,
                 dropdownColor: Colors.white,
                 value: _selectedLanguage.isEmpty ? 'en' : _selectedLanguage,
                 hint: Text(
@@ -184,109 +208,166 @@ class _MySettingsState extends State<MySettings> {
       ),
       body: Column(
         children: [
-          const SizedBox(
-            height: 5,
-          ),
+          if (!auth.isLoggedIn)
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 10, right: 10, top: 10, bottom: 2),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()));
+                },
+                child: AnimatedContainer(
+                  curve: Curves.easeInOut,
+                  height: 120,
+                  width: 400,
+                  duration: const Duration(seconds: 3),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: gradientColors,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Log in ',
+                          style: GoogleFonts.openSans(
+                              color: Colors.white,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        const Text(
+                          'Shop the best in art',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              letterSpacing: 1.3),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          if (auth.isLoggedIn)
+            const SizedBox(
+              height: 5,
+            ),
           ListView(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             padding: const EdgeInsets.all(10),
             children: [
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => Navigator.push(
+              if (auth.isLoggedIn)
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Myaccount(
+                                name: '',
+                                email: '',
+                                phone: '',
+                              ))),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey[350]!,
+                            offset: const Offset(1, 1),
+                            blurRadius: 10,
+                            spreadRadius: 2),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    height: 60,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.manage_accounts_outlined,
+                            color: Colors.black,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.account,
+                            style: GoogleFonts.poppins(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              if (isSeller)
+                const SizedBox(
+                  height: 15,
+                ),
+              if (isSeller)
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Myaccount(
-                              name: '',
-                              email: '',
-                              phone: '',
-                            ))),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[350]!,
-                          offset: const Offset(1, 1),
-                          blurRadius: 10,
-                          spreadRadius: 2),
-                    ],
+                      builder: (context) => const ArtworkPage(),
+                    ),
                   ),
-                  padding: const EdgeInsets.all(8),
-                  height: 60,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.manage_accounts_outlined,
-                          color: Colors.black,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.account,
-                          style: GoogleFonts.poppins(
-                            fontSize: 18,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey[350]!,
+                            offset: const Offset(1, 1),
+                            blurRadius: 10,
+                            spreadRadius: 2),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    height: 60,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.collections_outlined,
                             color: Colors.black,
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.myArtwork,
+                            style: GoogleFonts.poppins(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ArtworkPage(),
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[350]!,
-                          offset: const Offset(1, 1),
-                          blurRadius: 10,
-                          spreadRadius: 2),
-                    ],
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  height: 60,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.collections_outlined,
-                          color: Colors.black,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.myArtwork,
-                          style: GoogleFonts.poppins(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
               if (isSeller)
                 const SizedBox(
                   height: 15,
@@ -337,9 +418,10 @@ class _MySettingsState extends State<MySettings> {
                     ),
                   ),
                 ),
-              const SizedBox(
-                height: 15,
-              ),
+              if (auth.isLoggedIn)
+                const SizedBox(
+                  height: 15,
+                ),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () => Navigator.push(
@@ -484,98 +566,58 @@ class _MySettingsState extends State<MySettings> {
               const SizedBox(
                 height: 15,
               ),
-              // GestureDetector(
-              //   behavior: HitTestBehavior.opaque,
-              //   onTap: () => Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => const MessagePage(
-              //         isAdmin: true,
-              //         receiverEmail: 'vaishnavprabha7@gmail.com',
-              //         receiverID: 'TX63IPNhBDNzlIrYjlLeIxiCniT2',
-              //       ),
-              //     ),
-              //   ),
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(14),
-              //       color: Colors.white,
-              //       boxShadow: [
-              //         BoxShadow(
-              //             color: Colors.grey[350]!,
-              //             offset: const Offset(1, 1),
-              //             blurRadius: 10,
-              //             spreadRadius: 2),
-              //       ],
-              //     ),
-              //     padding: const EdgeInsets.all(8),
-              //     height: 60,
-              //     child: Padding(
-              //       padding: const EdgeInsets.all(10.0),
-              //       child: Row(
-              //         children: [
-              //           const Icon(
-              //             Icons.chat_outlined,
-              //             color: Colors.black,
-              //           ),
-              //           const SizedBox(
-              //             width: 10,
-              //           ),
-              //           Text(
-              //             'Chat with us',
-              //             style: GoogleFonts.poppins(
-              //               fontSize: 18,
-              //               color: Colors.black,
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(
-              //   height: 15,
-              // ),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: signOut,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[350]!,
-                          offset: const Offset(1, 1),
-                          blurRadius: 10,
-                          spreadRadius: 2),
-                    ],
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  height: 60,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.logout_outlined,
-                          color: Colors.black,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.logout,
-                          style: GoogleFonts.poppins(
-                            fontSize: 18,
+              if (auth.isLoggedIn)
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () async {
+                    await auth.logout();
+                    if (mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const BottomNavBar(
+                                  currentIndex: 0,
+                                )),
+                      );
+                    }
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey[350]!,
+                            offset: const Offset(1, 1),
+                            blurRadius: 10,
+                            spreadRadius: 2),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    height: 60,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.logout_outlined,
                             color: Colors.black,
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.logout,
+                            style: GoogleFonts.poppins(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           )
         ],

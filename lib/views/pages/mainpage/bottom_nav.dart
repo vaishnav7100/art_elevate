@@ -11,14 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({super.key});
+  final int currentIndex;
+  const BottomNavBar({super.key, this.currentIndex = 0});
 
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  int currentIndex = 0;
+  late int currentIndex;
   List screens = [
     const HomePage(),
     const ChatPage(),
@@ -26,6 +27,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
     const MyOrders(),
     const MySettings(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.currentIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +67,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         child: BottomAppBar(
           elevation: 20,
           height: 60,
-          color: Colors.grey[50], // Light shadow effect
+          color: Colors.grey[50],
           shape: const CircularNotchedRectangle(),
           notchMargin: currentIndex == 2 ? 6 : 0,
           clipBehavior: Clip.antiAliasWithSaveLayer,

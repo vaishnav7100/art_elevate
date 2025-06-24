@@ -1,33 +1,38 @@
 import 'package:art_elevate/l10n/app_localizations.dart';
+import 'package:art_elevate/models/auth_viewmodel.dart';
 import 'package:art_elevate/views/pages/loginpage/splash_screen.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
- await Firebase.initializeApp(
-  options: kIsWeb
-      ? const FirebaseOptions(
-          apiKey: "AIzaSyDDJLqzsAidQiae0bysssnyyE3xdM_yzSI",
-          appId: "1:1036178823711:web:b091190672ee4004ba532a",
-          messagingSenderId: "1036178823711",
-          projectId: "art-elevate",
-          storageBucket: "art-elevate.firebasestorage.app",
-        )
-      : null,
-);
+  await Firebase.initializeApp(
+    options: kIsWeb
+        ? const FirebaseOptions(
+            apiKey: "AIzaSyDDJLqzsAidQiae0bysssnyyE3xdM_yzSI",
+            appId: "1:1036178823711:web:b091190672ee4004ba532a",
+            messagingSenderId: "1036178823711",
+            projectId: "art-elevate",
+            storageBucket: "art-elevate.firebasestorage.app",
+          )
+        : null,
+  );
 
-if (!kIsWeb) {
-  await FirebaseAppCheck.instance.activate();
-}
+  if (!kIsWeb) {
+    await FirebaseAppCheck.instance.activate();
+  }
 
   String savedLanguage = await _loadLanguagePreference();
   runApp(
-    MyApp(initialLanguage: savedLanguage),
+    ChangeNotifierProvider(
+      create: (_) => AuthViewModel(),
+      child: MyApp(initialLanguage: savedLanguage),
+    ),
   );
 }
 

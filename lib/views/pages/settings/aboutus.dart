@@ -1,7 +1,6 @@
 import 'package:art_elevate/l10n/app_localizations.dart';
 import 'package:art_elevate/views/utils/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:art_elevate/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AboutUs extends StatefulWidget {

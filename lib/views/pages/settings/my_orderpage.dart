@@ -28,7 +28,7 @@ class _MyOrdersState extends State<MyOrders> {
   Future<void> getOrdered() async {
     CollectionReference orderRef = FirebaseFirestore.instance
         .collection('users')
-        .doc(user!.uid)
+        .doc(user?.uid)
         .collection('orders');
     final snapshot = await orderRef.get();
     if (mounted) {
@@ -361,7 +361,7 @@ class _MyOrdersState extends State<MyOrders> {
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('users')
-                        .doc(user!.uid)
+                        .doc(user?.uid)
                         .collection('orders')
                         .orderBy('Ordered_Date', descending: true)
                         .snapshots(),
